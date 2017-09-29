@@ -1,0 +1,25 @@
+{
+  "name": "twitool",
+  "version": "0.0.0",
+  "description": "An standalone, open-source tooling application for Twitter!",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mim-Armand/TwiTool.git"
+  },
+  "keywords": [
+    "twitter",
+    "tooling",
+    "electron",
+    "react",
+    "redux"
+  ],
+  "author": "mim",
+  "bugs": {
+    "url": "https://github.com/mim-Armand/TwiTool/issues"
+  },
+  "homepage": "https://www.linkedin.com/in/3dots/"
+}
