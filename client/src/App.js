@@ -1,8 +1,17 @@
+//@flow
+
+type Props = {
+    foo: number,
+};
+type State = {
+    bar: number,
+};
+
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+class App extends Component<Props, State> {
   render() {
     return (
       <div className="App">

@@ -1,10 +1,14 @@
 {
   "name": "twitool",
+  "productName": "TwiTool",
   "version": "0.0.0",
   "description": "An standalone, open-source tooling application for Twitter!",
   "main": "main.js",
   "scripts": {
-    "test": "./node_modules/jshint/bin/jshint main.js"
+    "test": "./node_modules/jshint/bin/jshint main.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -17,12 +21,25 @@
     "react",
     "redux"
   ],
+  "license": "ISC",
   "author": "mim",
   "bugs": {
     "url": "https://github.com/mim-Armand/TwiTool/issues"
   },
   "homepage": "https://www.linkedin.com/in/3dots/",
   "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron": "^1.7.8",
+    "electron-builder": "^19.33.0",
     "jshint": "^2.9.5"
+  },
+  "build": {
+    "appId": "eu.armand.twitool",
+    "copyright": "Copyright © 2018 mim_Armand",
+    "productName": "TwiTool!",
+    "mac": {
+      "category": "public.app-category.social-networking",
+      "icon": "assets/icons/mac/icon.icns"
+    }
   }
 }
