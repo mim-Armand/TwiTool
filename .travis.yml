@@ -4,7 +4,7 @@ dist: trusty
 language: c
 matrix:
   include:
-  - os: osx
+#  - os: osx
   - os: linux
     env: CC=clang CXX=clang++ npm_config_clang=1
     compiler: clang
@@ -24,7 +24,8 @@ before_install:
 - mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v1.2.1/git-lfs-$([
   "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-1.2.1.tar.gz
   | tar -xz -C /tmp/git-lfs --strip-components 1 && /tmp/git-lfs/git-lfs pull
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends
+  -y icnsutils graphicsmagick xz-utils; fi
 install:
 - export DISPLAY=':99.0'
 - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
@@ -38,5 +39,7 @@ branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
 notifications:
-  slack: $SLACK_STUFF
+  slack:
+    rooms:
+      secure: pcz7ctfnK39wx0cQkdiL4C779lfSxkpmzbHR1nQozeG2Kd0KEh3Y1j0iYqZg/qIZLQCtBkIq5Kvnh1CB35AdgPqCiMVp/tNpy99mstzYRoKG2S6fnYPMM23IJPZUG2eOvqRf0oONbWCn5mpnQwm9aHgYwIfjwBxHDrSMyOe1iGvAMkPgNJTF3/6yoCKYE2gck36/XwCxaWckrTPKrT2c2Rm64urHsphkVOKbvwd5qw2rPHWQQQ7ftQ2fkxLiWvmjwVd5OHqIQT846nd2vG4wqfnSzR6wxV9tCt1JgEZOTfrJnpoY+cCqBtRW5C/AuSCdnKM2pkdjYDpBU1Iqf8JO7nCCfpBrtqb7bbrLQ8IJeRMAKCdHCLchmb0n3SzvQx8Y+q0J6v1TYWKnXmcZGiMLPZpuuXhc/LPItZ/8r0PvBt8TelVGD9Vkp4h0JqqmKyPD5aVpXATtirIjbtuesOFMWL6OAQMkTikgUsI3D3AeNmZEip25ssk7xImv5GVkir940xmY9QlNjN9pgAQmYO3D73xcXKwGfDiJyFM7vJAJWJ1la5WeG43JC3fEjXsnMMHBTQNPhJpyBJp8FGt9xWY1uIhx69DYYGAfFF02IetLt9o4NuQWDOEkR8jwq9e8ZOZSRNhCB6r1xWkC4jIlbXADH/F5IZa40KVO5t2Ws7ehv8M=
   email: false
