@@ -42,5 +42,8 @@
       "category": "public.app-category.social-networking",
       "icon": "assets/icons/mac/icon.icns"
     }
+  },
+  "dependencies": {
+    "electron-updater": "^2.10.1"
   }
 }
