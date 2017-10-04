@@ -37,3 +37,6 @@ script:
 branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
+notifications:
+  slack: '$SLACK_ACCOUNT:$SLACK_TOKEN#twitool'
+  email: false
