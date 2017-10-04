@@ -38,5 +38,5 @@ branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
 notifications:
-  slack: '$SLACK_ACCOUNT:$SLACK_TOKEN#twitool'
+  slack: $SLACK_STUFF
   email: false
