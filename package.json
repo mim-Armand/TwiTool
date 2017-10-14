@@ -1,7 +1,7 @@
 {
   "name": "twitool",
   "productName": "TwiTool",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An standalone, open-source tooling application for Twitter!",
   "main": "main.js",
   "scripts": {
@@ -40,10 +40,14 @@
     "productName": "TwiTool!",
     "mac": {
       "category": "public.app-category.social-networking",
-      "icon": "assets/icons/mac/icon.icns"
+      "icon": "build/icon.icns",
+      "publish": [
+        "github"
+      ]
     }
   },
   "dependencies": {
+    "electron-log": "^2.2.9",
     "electron-updater": "^2.10.1"
   }
 }
