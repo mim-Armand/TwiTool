@@ -5,6 +5,7 @@ const path = require('path');
 const url = require('url');
 const {autoUpdater} = require("electron-updater");
 const log = require('electron-log'); // ~/Library/Logs/<app name>/log.log
+const isDev = require('electron-is-dev');
 
 //----------------------------------------------------------------------------------------------------------------------
 //          Logging
@@ -42,56 +43,56 @@ if (process.platform === 'darwin') {
     })
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//          Update Window
+// == == == == == == == == == == == == == == == == <Update Window> == == == == == == == == == == == == == == == == == ==
+// let updateWin;
 //
-let updateWin;
+// function sendStatusToWindow(text) {
+//     log.info(text);
+//     updateWin.webContents.send('message', text);
+// }
+// function createUpdateWindow() {
+//     updateWin = new BrowserWindow();
+//     updateWin.webContents.openDevTools();
+//     updateWin.on('closed', ()=>{
+//         updateWin = null;
+//     })
+//     updateWin.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`)
+//     log.info(autoUpdater)
+//     return updateWin;
+// }
+// autoUpdater.on('checking-for-update', () => {
+//     log.info('Checking for update...')
+//     sendStatusToWindow('Checking for update...');
+// })
+// autoUpdater.on('update-available', (info) => {
+//     log.info('Update available.')
+//     sendStatusToWindow('Update available.');
+// })
+// autoUpdater.on('update-not-available', (info) => {
+//     log.info('Update not available.')
+//     sendStatusToWindow('Update not available.');
+// })
+// autoUpdater.on('error', (err) => {
+//     log.info('Error in auto-updater.')
+//     sendStatusToWindow('Error in auto-updater.');
+// })
+// autoUpdater.on('download-progress', (progressObj) => {
+//     log.info('download-progress')
+//     let log_message = "Download speed: " + progressObj.bytesPerSecond;
+//     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+//     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+//     sendStatusToWindow(log_message);
+// })
+// autoUpdater.on('update-downloaded', (info) => {
+//     log.info('update-downloaded')
+//     log.info(info)
+//     sendStatusToWindow('Update downloaded; will install in 5 seconds');
+// });
+// app.on('ready', function()  {
+//     autoUpdater.checkForUpdates();
+// });
 
-function sendStatusToWindow(text) {
-    log.info(text);
-    updateWin.webContents.send('message', text);
-}
-function createUpdateWindow() {
-    updateWin = new BrowserWindow();
-    updateWin.webContents.openDevTools();
-    updateWin.on('closed', ()=>{
-        updateWin = null;
-    })
-    updateWin.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`)
-    log.info(autoUpdater)
-    return updateWin;
-}
-autoUpdater.on('checking-for-update', () => {
-    log.info('Checking for update...')
-    sendStatusToWindow('Checking for update...');
-})
-autoUpdater.on('update-available', (info) => {
-    log.info('Update available.')
-    sendStatusToWindow('Update available.');
-})
-autoUpdater.on('update-not-available', (info) => {
-    log.info('Update not available.')
-    sendStatusToWindow('Update not available.');
-})
-autoUpdater.on('error', (err) => {
-    log.info('Error in auto-updater.')
-    sendStatusToWindow('Error in auto-updater.');
-})
-autoUpdater.on('download-progress', (progressObj) => {
-    log.info('download-progress')
-    let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    sendStatusToWindow(log_message);
-})
-autoUpdater.on('update-downloaded', (info) => {
-    log.info('update-downloaded')
-    log.info(info)
-    sendStatusToWindow('Update downloaded; will install in 5 seconds');
-});
-app.on('ready', function()  {
-    autoUpdater.checkForUpdates();
-});
+// == == == == == == == == == == == == == == == == </Update Window> == == == == == == == == == == == == == == == == == ==
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -101,15 +102,17 @@ let win;
 function createWindow () {
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
-    createUpdateWindow()
+    // createUpdateWindow()
 
     // Create the browser window.
     win = new BrowserWindow({width: 800, height: 600});
 
     // and load the index.html of the app.
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
+        // pathname: path.join(__dirname, 'client/build/index.html'),
+        // protocol: 'file:',
+        pathname: (isDev ? '//localhost:3000' : `//${path.join(__dirname, 'client/build/index.html')}`),
+        protocol: (isDev ? 'http:' : 'file:'),
         slashes: true
     }));
 
