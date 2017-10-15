@@ -6,8 +6,8 @@ platform:
 cache:
   - node_modules -> package-lock.json
   - app\node_modules -> package-lock.json
-  - '%APPDATA%\npm-cache' -> package-lock.json
-  - '%USERPROFILE%\.electron' -> package-lock.json
+#  - '%APPDATA%\npm-cache'
+#  - '%USERPROFILE%\.electron'
 
 init:
   - git config --global core.autocrlf input
