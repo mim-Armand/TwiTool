@@ -5,10 +5,9 @@ platform:
 
 cache:
   - node_modules -> package-lock.json
-#  - node_modules
-#  - app\node_modules
-#  - '%APPDATA%\npm-cache'
-#  - '%USERPROFILE%\.electron'
+  - app\node_modules -> package-lock.json
+  - '%APPDATA%\npm-cache' -> package-lock.json
+  - '%USERPROFILE%\.electron' -> package-lock.json
 
 init:
   - git config --global core.autocrlf input
@@ -19,9 +18,10 @@ install:
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - ps: >-
       If ($APPVEYOR_REPO_COMMIT_MESSAGE -like '*release candidate*') {
-        echo "*** *** *** *** RELEASE CANDIDATE! *** *** *** ***"
+        echo "*** *** *** *** RELEASE CANDIDATE! *** *** *** ***";
       } Else {
-        echo "*** *** *** *** NOT A RELEASE CANDIDATE *** *** *** ***"
+        echo "*** *** *** *** NOT A RELEASE CANDIDATE *** *** *** ***";
+        echo $APPVEYOR_REPO_COMMIT_MESSAGE
       }
   - git reset --hard HEAD
   - npm install npm -g
