@@ -18,7 +18,7 @@ install:
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - ps: >-
       If ($APPVEYOR_REPO_COMMIT_MESSAGE -like '*release candidate*') {
-        echo ">>> >>> >>> RELEASE CANDIDATE"
+        echo ">>> >>> >>> RELEASE CANDIDATE!"
       } Else {
         echo ">>> >>> >>> JUST TESTING THE BUILD!"
       }
