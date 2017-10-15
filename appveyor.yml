@@ -17,6 +17,7 @@ install:
   - git reset --hard HEAD
   - npm install npm -g
   - npm install electron-builder@next # force install next version to test electron-builder
+  - echo $APPVEYOR_REPO_COMMIT_MESSAGE
   - npm install
   - npm install --prefix ./client
   - npm run build --prefix ./client
