@@ -40,10 +40,10 @@ script:
     else \
       if [ "$TRAVIS_COMMIT_MESSAGE" == *"release candidate"*  ]; then \
         echo ">>> >>> >>> RELEASE CANDIDATE! <<< <<< <<<"; \
-        yarn release \
+        && yarn release \
       else \
         echo ">>> NOT A RELEASE CANDIDATE <<<"; \
-        yarn build \
+        && yarn build \
       fi \
     fi
 
