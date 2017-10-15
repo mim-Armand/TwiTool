@@ -39,9 +39,9 @@ script:
         /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn release --linux --win"
     else \
       if [ "$TRAVIS_COMMIT_MESSAGE" == *"release candidate"*  ]; then \
-        yarn release \
+        yarn release; \
       else \
-        yarn build \
+        yarn build; \
       fi \
     fi
 
