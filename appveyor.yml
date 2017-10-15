@@ -25,6 +25,7 @@ install:
       }
   - git reset --hard HEAD
   - npm install npm -g
+  - npm install yarn -g
   - npm install electron-builder@next # force install next version to test electron-builder
   - npm install
   - npm install --prefix ./client
@@ -36,9 +37,9 @@ build_script:
   - npm --version
   - ps: >-
       If ($APPVEYOR_REPO_COMMIT_MESSAGE -like '*release candidate*') {
-        npm run release
+        yarn release
       } Else {
-        npm run build
+        yarn build
       }
 #  - npm run release
 
