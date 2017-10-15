@@ -17,7 +17,7 @@ install:
   - echo "Commit Message:"
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - ps: >-
-      If ($APPVEYOR_REPO_COMMIT_MESSAGE -match '*release candidate*') {
+      If ($APPVEYOR_REPO_COMMIT_MESSAGE -match 'release candidate') {
         echo "*** *** *** *** RELEASE CANDIDATE! *** *** *** ***";
       } Else {
         echo "*** *** *** *** NOT A RELEASE CANDIDATE *** *** *** ***";
@@ -36,7 +36,7 @@ build_script:
   - node --version
   - npm --version
   - ps: >-
-      If ($APPVEYOR_REPO_COMMIT_MESSAGE -match '*release candidate*') {
+      If ($APPVEYOR_REPO_COMMIT_MESSAGE -match 'release candidate') {
         yarn release
       } Else {
         yarn build
