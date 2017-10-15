@@ -14,6 +14,7 @@ init:
 
 install:
   - ps: Install-Product node 6 x64
+  - echo "Commit Message:"
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - git reset --hard HEAD
   - npm install npm -g
@@ -26,7 +27,12 @@ install:
 build_script:
   - node --version
   - npm --version
-  - echo $APPVEYOR_REPO_COMMIT_MESSAGE
+  - ps: >-
+      If ($APPVEYOR_REPO_COMMIT_MESSAGE == *"release candidate"*) {
+        npm run release
+      } Else {
+        npm run build
+      }
   - npm run release
 
 test: off
