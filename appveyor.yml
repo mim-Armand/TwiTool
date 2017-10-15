@@ -4,6 +4,7 @@ platform:
   - x64
 
 cache:
+  - node_modules -> package-lock.json
 #  - node_modules
 #  - app\node_modules
 #  - '%APPDATA%\npm-cache'
@@ -18,9 +19,9 @@ install:
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - ps: >-
       If ($APPVEYOR_REPO_COMMIT_MESSAGE -like '*release candidate*') {
-        echo ">>> >>> >>> RELEASE CANDIDATE!"
+        echo "*** *** *** *** RELEASE CANDIDATE! *** *** *** ***"
       } Else {
-        echo ">>> >>> >>> JUST TESTING THE BUILD!"
+        echo "*** *** *** *** NOT A RELEASE CANDIDATE *** *** *** ***"
       }
   - git reset --hard HEAD
   - npm install npm -g
@@ -39,6 +40,6 @@ build_script:
       } Else {
         npm run build
       }
-  - npm run release
+#  - npm run release
 
 test: off
