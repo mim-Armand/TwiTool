@@ -17,7 +17,7 @@ install:
   - echo "Commit Message:"
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
   - ps: >-
-      If ($APPVEYOR_REPO_COMMIT_MESSAGE == *"release candidate"*) {
+      If ($APPVEYOR_REPO_COMMIT_MESSAGE -like '*release candidate*') {
         echo ">>> >>> >>> RELEASE CANDIDATE"
       } Else {
         echo ">>> >>> >>> JUST TESTING THE BUILD!"
@@ -34,7 +34,7 @@ build_script:
   - node --version
   - npm --version
   - ps: >-
-      If ($APPVEYOR_REPO_COMMIT_MESSAGE == *"release candidate"*) {
+      If ($APPVEYOR_REPO_COMMIT_MESSAGE -like '*release candidate*') {
         npm run release
       } Else {
         npm run build
