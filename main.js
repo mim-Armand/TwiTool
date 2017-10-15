@@ -18,7 +18,7 @@ log.info('App starting...');
 //----------------------------------------------------------------------------------------------------------------------
 //          MENU
 //
-let template = []
+let template = [];
 if (process.platform === 'darwin') {
     // OS X
     const name = app.getName();
@@ -32,7 +32,7 @@ if (process.platform === 'darwin') {
             {
                 label: 'Check for updates',
                 click(){
-                    checkForUpdates()
+                    checkForUpdates();
                 }
             },
             {
@@ -41,11 +41,11 @@ if (process.platform === 'darwin') {
                 click() { app.quit(); }
             },
         ]
-    })
+    });
 }
 
 function checkForUpdates(){
-    dialog.showMessageBox({"type": "info", "title":"Updates", "message":"Checking for updates..", "detail":"We'll check for updates and notify you once there is one available.\n\nThank you."})
+    dialog.showMessageBox({"type": "info", "title":"Updates", "message":"Checking for updates..", "detail":"We'll check for updates and notify you once there is one available.\n\nThank you."});
 }
 
 // Keep a global reference of the window object, if you don't, the window will
