@@ -35,12 +35,13 @@ install:
 build_script:
   - node --version
   - npm --version
-  - ps: >-
-      If ($APPVEYOR_REPO_COMMIT_MESSAGE -match 'release candidate') {
-        yarn release
-      } Else {
-        yarn build
-      }
+  #TODO!
+#  - ps: >-
+#      If ($APPVEYOR_REPO_COMMIT_MESSAGE -match 'release candidate') {
+#        yarn release
+#      } Else {
+#        yarn build
+#      }
 #  - npm run release
 
 test: off
