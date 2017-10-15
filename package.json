@@ -6,13 +6,15 @@
   "main": "main.js",
   "scripts": {
     "start": "concurrently \"BROWSER=none npm start --prefix ./client\" \"wait-on http://localhost:3000 && electron .\"",
+    "resume": "electron .",
     "test": "./node_modules/jshint/bin/jshint main.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "release": "build",
     "build": "build --publish never",
-    "prebuild": "npm run build --prefix ./client"
+    "prebuild": "npm run build --prefix ./client",
+    "build_main": "build --publish never"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,12 @@
 /* jshint node: true */
 /*jshint esversion: 6 */
-const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
+const {app, BrowserWindow, Menu, protocol, ipcMain, dialog} = require('electron');
 const path = require('path');
 const url = require('url');
 const {autoUpdater} = require("electron-updater");
 const log = require('electron-log'); // ~/Library/Logs/<app name>/log.log
 const isDev = require('electron-is-dev');
+require('./auto-update.js');
 
 //----------------------------------------------------------------------------------------------------------------------
 //          Logging
@@ -29,9 +30,9 @@ if (process.platform === 'darwin') {
                 role: 'about'
             },
             {
-                label: 'Update ' + name,
+                label: 'Check for updates',
                 click(){
-                    createUpdateWindow()
+                    checkForUpdates()
                 }
             },
             {
@@ -43,57 +44,9 @@ if (process.platform === 'darwin') {
     })
 }
 
-// == == == == == == == == == == == == == == == == <Update Window> == == == == == == == == == == == == == == == == == ==
-// let updateWin;
-//
-// function sendStatusToWindow(text) {
-//     log.info(text);
-//     updateWin.webContents.send('message', text);
-// }
-// function createUpdateWindow() {
-//     updateWin = new BrowserWindow();
-//     updateWin.webContents.openDevTools();
-//     updateWin.on('closed', ()=>{
-//         updateWin = null;
-//     })
-//     updateWin.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`)
-//     log.info(autoUpdater)
-//     return updateWin;
-// }
-// autoUpdater.on('checking-for-update', () => {
-//     log.info('Checking for update...')
-//     sendStatusToWindow('Checking for update...');
-// })
-// autoUpdater.on('update-available', (info) => {
-//     log.info('Update available.')
-//     sendStatusToWindow('Update available.');
-// })
-// autoUpdater.on('update-not-available', (info) => {
-//     log.info('Update not available.')
-//     sendStatusToWindow('Update not available.');
-// })
-// autoUpdater.on('error', (err) => {
-//     log.info('Error in auto-updater.')
-//     sendStatusToWindow('Error in auto-updater.');
-// })
-// autoUpdater.on('download-progress', (progressObj) => {
-//     log.info('download-progress')
-//     let log_message = "Download speed: " + progressObj.bytesPerSecond;
-//     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-//     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-//     sendStatusToWindow(log_message);
-// })
-// autoUpdater.on('update-downloaded', (info) => {
-//     log.info('update-downloaded')
-//     log.info(info)
-//     sendStatusToWindow('Update downloaded; will install in 5 seconds');
-// });
-// app.on('ready', function()  {
-//     autoUpdater.checkForUpdates();
-// });
-
-// == == == == == == == == == == == == == == == == </Update Window> == == == == == == == == == == == == == == == == == ==
-
+function checkForUpdates(){
+    dialog.showMessageBox({"type": "info", "title":"Updates", "message":"Checking for updates..", "detail":"We'll check for updates and notify you once there is one available.\n\nThank you."})
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -102,7 +55,6 @@ let win;
 function createWindow () {
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
-    // createUpdateWindow()
 
     // Create the browser window.
     win = new BrowserWindow({width: 800, height: 600});
