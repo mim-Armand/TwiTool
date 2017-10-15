@@ -16,6 +16,12 @@ install:
   - ps: Install-Product node 6 x64
   - echo "Commit Message:"
   - echo %APPVEYOR_REPO_COMMIT_MESSAGE%
+  - ps: >-
+      If ($APPVEYOR_REPO_COMMIT_MESSAGE == *"release candidate"*) {
+        echo ">>> >>> >>> RELEASE CANDIDATE"
+      } Else {
+        echo ">>> >>> >>> JUST TESTING THE BUILD!"
+      }
   - git reset --hard HEAD
   - npm install npm -g
   - npm install electron-builder@next # force install next version to test electron-builder
