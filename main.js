@@ -1,21 +1,70 @@
 /* jshint node: true */
 /*jshint esversion: 6 */
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, Menu, protocol, ipcMain, dialog} = require('electron');
 const path = require('path');
 const url = require('url');
+const {autoUpdater} = require("electron-updater");
+const log = require('electron-log'); // ~/Library/Logs/<app name>/log.log
+const isDev = require('electron-is-dev');
+require('./auto-update.js');
+
+//----------------------------------------------------------------------------------------------------------------------
+//          Logging
+//
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+//----------------------------------------------------------------------------------------------------------------------
+//          MENU
+//
+let template = [];
+if (process.platform === 'darwin') {
+    // OS X
+    const name = app.getName();
+    template.unshift({
+        label: name,
+        submenu: [
+            {
+                label: 'About ' + name,
+                role: 'about'
+            },
+            {
+                label: 'Check for updates',
+                click(){
+                    checkForUpdates();
+                }
+            },
+            {
+                label: 'Quit',
+                accelerator: 'Command+Q',
+                click() { app.quit(); }
+            },
+        ]
+    });
+}
+
+function checkForUpdates(){
+    dialog.showMessageBox({"type": "info", "title":"Updates", "message":"Checking for updates..", "detail":"We'll check for updates and notify you once there is one available.\n\nThank you."});
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
 function createWindow () {
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+
     // Create the browser window.
     win = new BrowserWindow({width: 800, height: 600});
 
     // and load the index.html of the app.
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
+        // pathname: path.join(__dirname, 'client/build/index.html'),
+        // protocol: 'file:',
+        pathname: (isDev ? '//localhost:3000' : `//${path.join(__dirname, 'client/build/index.html')}`),
+        protocol: (isDev ? 'http:' : 'file:'),
         slashes: true
     }));
 

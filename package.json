@@ -1,15 +1,20 @@
 {
   "name": "twitool",
   "productName": "TwiTool",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An standalone, open-source tooling application for Twitter!",
   "main": "main.js",
   "scripts": {
+    "start": "concurrently \"BROWSER=none npm start --prefix ./client\" \"wait-on http://localhost:3000 && electron .\"",
+    "resume": "electron .",
     "test": "./node_modules/jshint/bin/jshint main.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "release": "build"
+    "release": "build",
+    "build": "build --publish never",
+    "prebuild": "npm run build --prefix ./client",
+    "build_main": "build --publish never"
   },
   "repository": {
     "type": "git",
@@ -30,17 +35,32 @@
   "homepage": "https://www.linkedin.com/in/3dots/",
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "^1.7.8",
-    "electron-builder": "^19.33.0",
+    "electron": "^1.8.1",
+    "electron-builder": "^19.37.1",
     "jshint": "^2.9.5"
   },
   "build": {
     "appId": "eu.armand.twitool",
     "copyright": "Copyright © 2018 mim_Armand",
     "productName": "TwiTool!",
+    "files":[
+      "./client/build/**/*",
+      "main.js",
+      "version.html"
+    ],
     "mac": {
       "category": "public.app-category.social-networking",
-      "icon": "assets/icons/mac/icon.icns"
+      "icon": "build/icon.icns",
+      "publish": [
+        "github"
+      ]
     }
+  },
+  "dependencies": {
+    "concurrently": "^3.5.0",
+    "electron-is-dev": "^0.3.0",
+    "electron-log": "^2.2.9",
+    "electron-updater": "^2.12.1",
+    "wait-on": "^2.0.2"
   }
 }
