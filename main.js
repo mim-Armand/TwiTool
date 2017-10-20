@@ -57,7 +57,7 @@ function createWindow () {
     Menu.setApplicationMenu(menu);
 
     // Create the browser window.
-    win = new BrowserWindow({width: 800, height: 600});
+    win = new BrowserWindow({width: 300, height: 600, frame: false});
 
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -69,7 +69,7 @@ function createWindow () {
     }));
 
     // Open the DevTools.
-    win.webContents.openDevTools();
+    win.webContents.openDevTools({mode: "detach"});
 
     // Emitted when the window is closed.
     win.on('closed', () => {
