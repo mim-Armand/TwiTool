@@ -11,15 +11,37 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Roboto:300,400,500" rel="stylesheet">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+      <script defer src="./fontawesome/js/packs/solid.js"></script>
+      <script defer src="./fontawesome/js/packs/brands.min.js"></script>
+      <script defer src="./fontawesome/js/fontawesome.min.js"></script>
+      <script>
+          isElectron = (typeof require !== 'undefined');
+          const { remote, BrowserWindow, shell, ipcRenderer} = isElectron? require("electron") : {remote:null, BrowserWindow:null, shell: null, ipcRenderer: null};
+          const app = isElectron ? remote.app: null;
+          const os = isElectron? require('os'): null;
+          const platform = isElectron? os.platform() + '_' + os.arch() : 'web';
+          const version = isElectron? app.getVersion(): null;
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+          // if we couldn't get the redux-persist to work this could be an alternative?!:
+//          const El_Store = require('electron-store');
+//          if (typeof El_Store !== 'undefined') el_store = new El_Store({name: "machine"});
+//          el_store.set('unicorn', '🦄🦄🦄', el_store);
+//          console.log(el_store.get('unicorn'));
+
+
+          //     ipcRenderer.on('test-ipc', (event, arg) => {
+          //       console.log('HEY YE IPC s workn fine ya',arg) // prints "pong"
+          //     })
+      </script>
+      <!--
+        Notice the use of %PUBLIC_URL% in the tags above.
+        It will be replaced with the URL of the `public` folder during the build.
+        Only files inside the `public` folder can be referenced from the HTML.
+
+        Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+        work correctly both with client-side routing and a non-root public URL.
+        Learn how to configure a non-root public URL by running `npm run build`.
+      -->
     <title>TwiTool</title>
   </head>
   <body>

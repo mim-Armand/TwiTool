@@ -1,6 +1,7 @@
 /* jshint node: true */
 /*jshint esversion: 6 */
-const {app, BrowserWindow, Menu, protocol, ipcMain, dialog} = require('electron');
+const {app, BrowserWindow, Menu, TouchBar, protocol, ipcMain, dialog} = require('electron');
+const {TouchBarLabel, TouchBarButton, TouchBarSpacer} = TouchBar;
 const path = require('path');
 const url = require('url');
 const {autoUpdater} = require("electron-updater");
@@ -14,6 +15,24 @@ require('./auto-update.js');
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
+
+//----------------------------------------------------------------------------------------------------------------------
+//          TouchBar
+//
+
+const touchbarBtn = new TouchBarButton({
+    label: '🏁 ' + app.getName() + '! ',
+    backgroundColor: '#cccccc',
+})
+const touchbarLabel = new TouchBarLabel()
+touchbarLabel.label = 'Welcome to ' + app.getName() + ' 🤖 ⓒ mim.Armand - (v.' + app.getVersion() + ')';
+const touchBar = new TouchBar([
+    new TouchBarSpacer({size: 'large'}),
+    touchbarBtn,
+    new TouchBarSpacer({size: 'small'}),
+    touchbarLabel,
+])
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //          MENU
@@ -53,11 +72,13 @@ function checkForUpdates(){
 let win;
 
 function createWindow () {
+    app.dock.setBadge('Hi!👋')
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
 
     // Create the browser window.
     win = new BrowserWindow({width: 300, height: 600, frame: false});
+    win.setTouchBar(touchBar)
 
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -91,7 +112,7 @@ app.on('window-all-closed', () => {
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
     app.quit();
-}
+    }
 });
 
 app.on('activate', () => {
