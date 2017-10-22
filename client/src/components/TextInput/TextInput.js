@@ -12,7 +12,7 @@ type State = {
 class TextInput extends Component<Props, State> {
   render() {
     return (
-      <div className="App">
+      <div>
 
           <span className="input input--nao">
                 <input className="input__field input__field--nao" type="text" id="input-1" />

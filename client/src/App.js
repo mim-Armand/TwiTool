@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import TextInput from './components/TextInput/TextInput'
+import Steps from "./components/Steps/Steps";
+import WindowBar from "./components/WindowBar/WindowBar";
 
 type Props = {
     foo: number,
@@ -14,6 +16,8 @@ class App extends Component<Props, State> {
   render() {
     return (
       <div className="App">
+          <WindowBar/>
+          <Steps/>
           <TextInput/>
         {/*<header className="App-header">*/}
           {/*<img src={logo} className="App-logo" alt="logo" />*/}
