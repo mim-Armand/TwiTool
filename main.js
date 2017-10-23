@@ -77,7 +77,12 @@ function createWindow () {
     Menu.setApplicationMenu(menu);
 
     // Create the browser window.
-    win = new BrowserWindow({width: 300, height: 600, frame: false});
+    win = new BrowserWindow({
+        width: 300
+        ,height: 600
+        ,frame: false
+        // ,'web-preferences': {'web-security': false} // uncomment if trouble with CORS!
+    });
     win.setTouchBar(touchBar)
 
     // and load the index.html of the app.

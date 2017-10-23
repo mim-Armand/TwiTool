@@ -4,6 +4,7 @@ import './App.css';
 import TextInput from './components/TextInput/TextInput'
 import Steps from "./components/Steps/Steps";
 import WindowBar from "./components/WindowBar/WindowBar";
+import MainContainer from "./containers/MainContainer";
 
 type Props = {
     foo: number,
@@ -16,6 +17,7 @@ class App extends Component<Props, State> {
   render() {
     return (
       <div className="App">
+          <MainContainer></MainContainer>
           <WindowBar/>
           <Steps/>
           <TextInput/>

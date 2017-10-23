@@ -5,7 +5,9 @@ function url() {
 }
 
 export function receiveStuff(json) {
-    return {type: types.RECEIVE_STUFF, stuff: json.stuff};
+    console.log('Actions ', json)
+    return {type: types.RECEIVE_STUFF, test: json};
+    // return {type: types.RECEIVE_STUFF, stuff: json.stuff};
 }
 
 export function fetchStuff() {
@@ -15,7 +17,7 @@ export function fetchStuff() {
             mode: 'cors',
             credentials: 'include',
             headers: {
-                'x-api-key': apiKey,
+                'x-api-key': '',
                 'Accept': 'application/json'
             }
         })
