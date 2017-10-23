@@ -5,6 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "animate.css": "^3.5.2",
+    "history": "^4.7.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
