@@ -17,10 +17,9 @@ class App extends Component<Props, State> {
   render() {
     return (
       <div className="App">
-          <MainContainer></MainContainer>
           <WindowBar/>
           <Steps/>
-          <TextInput/>
+          <MainContainer></MainContainer>
         {/*<header className="App-header">*/}
           {/*<img src={logo} className="App-logo" alt="logo" />*/}
           {/*<h1 className="App-title">Welcome to React</h1>*/}
