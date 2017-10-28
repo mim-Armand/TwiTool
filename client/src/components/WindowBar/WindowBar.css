@@ -2,6 +2,7 @@
     background: rgba(255, 255, 255, 0.21);
     height:18px;
     user-select: none;
+    -webkit-app-region: drag;
 }
 .right-block{
     float: right;
