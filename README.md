@@ -32,3 +32,4 @@ Release candidates should have the combination word `release candidate` in the c
  - [ ] [Add random bg photos](https://github.com/unsplash/unsplash-js)
  - [ ] [Use Anime.JS to add cool animations!](http://animejs.com/)
  - [ ] Add some cool open gl visual effects on the bg!
+ - [ ] Add a [notification system](https://github.com/igorprado/react-notification-system) 
