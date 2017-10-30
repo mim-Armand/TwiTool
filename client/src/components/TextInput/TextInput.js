@@ -16,7 +16,12 @@ class TextInput extends Component<Props, State> {
       <div className="input-nao-container">
 
           <span className={ classNames('input input--nao', {"input--filled": ( /\S/.test(this.props.val)) } )}>
-                <input onChange={this.props.onChange} className="input__field input__field--nao" type="text" id="input-1" value={this.props.val} />
+                <input
+                    onChange={this.props.onChange}
+                    className="input__field input__field--nao" type="text" id="input-1"
+                    value={this.props.val}
+                    data-forval={this.props.forval}
+                />
                 <label className="input__label input__label--nao" htmlFor="input-1">
                     <span className="input__label-content input__label-content--nao">{this.props.placeHolder}</span>
                 </label>

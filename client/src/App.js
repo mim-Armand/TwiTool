@@ -15,6 +15,7 @@ import createHistory from 'history/createBrowserHistory'
 import Page_SetUp from "./components/Page_SetUp/Page_SetUp";
 import Page_Search from "./components/Page_Search/Page_Search";
 import Page_Info from "./components/Page_Info/Page_Info";
+import Help_Twitter_App from "./components/Help_Twitter_App/Help_Twitter_App";
 const history = createHistory();
 
 type Props = {
@@ -41,6 +42,7 @@ class App extends Component<Props, State> {
                         <Route exact path="*" component={Steps}/>
                         <Route exact path="/" component={null}/>
                         <Route exact path="/setup" component={Page_SetUp}/>
+                        <Route exact path="/help_twitter_app" component={Help_Twitter_App}/>
                         <Route exact path="/search" component={Page_Search}/>
                         <Route exact path="/info" component={Page_Info}/>
                     </span>
