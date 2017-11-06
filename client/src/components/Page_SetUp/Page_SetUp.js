@@ -46,7 +46,7 @@ class Page_SetUp extends Component<Props, State> {
                 contains_error = true;
             }
         })
-        if( ! contains_error ) console.info('Now submitting and testing the twitter app creds')
+        if( ! contains_error ) this.props.submitTwitterApp(this.state)
     }
 
   render() {
