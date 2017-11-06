@@ -73,15 +73,15 @@ let win;
 
 function createWindow () {
     app.dock.setBadge('Hi!👋')
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    // const menu = Menu.buildFromTemplate(template); //todo: uncomment these two lines and add copy/paste to the application menu ( https://github.com/electron/electron/issues/4107 )
+    // Menu.setApplicationMenu(menu);
 
     // Create the browser window.
     win = new BrowserWindow({
         width: 300
         ,height: 600
         ,frame: false
-        // ,'web-preferences': {'web-security': false} // uncomment if trouble with CORS!
+        ,webPreferences: {webSecurity: false} // uncomment if trouble with CORS!
     });
     win.setTouchBar(touchBar)
 

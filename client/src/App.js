@@ -41,7 +41,7 @@ class App extends Component<Props, State> {
                     <span>
                         <Route exact path="*" component={Steps}/>
                         <Route exact path="/" component={null}/>
-                        <Route exact path="/setup" component={Page_SetUp}/>
+                        <Route exact path="/setup" render={props => <Page_SetUp submitTwitterApp={this.props.stuffActions.testTwitterApp} {...props} />} />
                         <Route exact path="/help_twitter_app" component={Help_Twitter_App}/>
                         <Route exact path="/search" component={Page_Search}/>
                         <Route exact path="/info" component={Page_Info}/>
