@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import './Page_SetUp.css';
 import TextInput from "../TextInput/TextInput";
+import Spinner from "../Spinner/Spinner";
 
 
 type Props = {
@@ -19,15 +20,15 @@ class Page_SetUp extends Component<Props, State> {
         this.formInputChange = this.formInputChange.bind(this);
         this.submitBtn = this.submitBtn.bind(this);
         this.state={
-            TWITTER_HANDLE: "",
-            TWITTER_CONSUMER_KEY: "",
-            TWITTER_CONSUMER_SECRET: "",
-            TWITTER_ACCESS_TOKEN_KEY: "",
-            TWITTER_ACCESS_TOKEN_SECRET: "",
+            TWITTER_HANDLE: `${this.props.handle || ""}`,
+            TWITTER_CONSUMER_KEY: `${this.props.twitter_app.TWITTER_CONSUMER_KEY || ""}`,
+            TWITTER_CONSUMER_SECRET: `${this.props.twitter_app.TWITTER_CONSUMER_SECRET || ""}`,
+            TWITTER_ACCESS_TOKEN_KEY: `${this.props.twitter_app.TWITTER_ACCESS_TOKEN_KEY || ""}`,
+            TWITTER_ACCESS_TOKEN_SECRET: `${this.props.twitter_app.TWITTER_ACCESS_TOKEN_SECRET || ""}`,
         }
     }
 
-    formInputChange(event){ //todo: according to the target update the corresponding part of the state
+    formInputChange(event){
         if( /\S/.test(event.target.value) ) {
             this.setState({
                 [event.target.dataset.forval]: event.target.value
@@ -52,11 +53,12 @@ class Page_SetUp extends Component<Props, State> {
   render() {
     return (
         <div>
+            <Spinner isLoading={this.props.isLoading}/>
             <TextInput onChange={this.formInputChange} val={this.state.TWITTER_HANDLE} forval="TWITTER_HANDLE" placeHolder="Twitter Handle"></TextInput>
             <TextInput onChange={this.formInputChange} val={this.state.TWITTER_CONSUMER_KEY} forval="TWITTER_CONSUMER_KEY" placeHolder="Twitter app Customer Key"></TextInput>
-            <TextInput onChange={this.formInputChange} val={this.state.TWITTER_CONSUMER_SECRET} forval="TWITTER_CONSUMER_SECRET" placeHolder="Twitter app Customer Secret"></TextInput>
+            <TextInput onChange={this.formInputChange} val={this.state.TWITTER_CONSUMER_SECRET} forval="TWITTER_CONSUMER_SECRET" placeHolder="Twitter app Customer Secret" type="password"></TextInput>
             <TextInput onChange={this.formInputChange} val={this.state.TWITTER_ACCESS_TOKEN_KEY} forval="TWITTER_ACCESS_TOKEN_KEY" placeHolder="Twitter app Token Key"></TextInput>
-            <TextInput onChange={this.formInputChange} val={this.state.TWITTER_ACCESS_TOKEN_SECRET} forval="TWITTER_ACCESS_TOKEN_SECRET" placeHolder="Twitter app Token Secret"></TextInput>
+            <TextInput onChange={this.formInputChange} val={this.state.TWITTER_ACCESS_TOKEN_SECRET} forval="TWITTER_ACCESS_TOKEN_SECRET" placeHolder="Twitter app Token Secret" type="password"></TextInput>
 
             <div className="btn-grp">
                 <button className="button button--naira button--round-s button--border-thin">

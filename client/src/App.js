@@ -41,7 +41,13 @@ class App extends Component<Props, State> {
                     <span>
                         <Route exact path="*" component={Steps}/>
                         <Route exact path="/" component={null}/>
-                        <Route exact path="/setup" render={props => <Page_SetUp submitTwitterApp={this.props.stuffActions.testTwitterApp} {...props} />} />
+                        <Route exact path="/setup"
+                               render={props => <Page_SetUp
+                                    submitTwitterApp={this.props.stuffActions.testTwitterApp}
+                                    twitter_app={this.props.stuff.twitter_app}
+                                    handle={this.props.stuff.handle}
+                                    isLoading={this.props.stuff.isLoading | false}
+                                    {...props} />} />
                         <Route exact path="/help_twitter_app" component={Help_Twitter_App}/>
                         <Route exact path="/search" component={Page_Search}/>
                         <Route exact path="/info" component={Page_Info}/>
@@ -59,7 +65,8 @@ App.propTypes = {
 function mapStateToProps(state) {
     console.log('mapStateToProps', state)
     return {
-        test: state.stuff.test
+        test: state.stuff.test,
+        stuff: state.stuff
     };
 }
 function mapDispatchToProps(dispatch) {
