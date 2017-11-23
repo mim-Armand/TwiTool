@@ -5,13 +5,23 @@ import configureStore from './store/configureStore';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import { PersistGate } from 'redux-persist/es/integration/react';
 
-const store = configureStore();
+const { persistor, store } = configureStore();
+
+const onBeforeLift = () => {
+    // take some action before the gate lifts
+}
 
 
 ReactDOM.render(
     <Provider store={store}>
+        <PersistGate
+            // loading={<Loading />} //TODO <<
+            onBeforeLift={onBeforeLift}
+            persistor={persistor}>
         <App></App>
+        </PersistGate>
     </Provider>
     , document.getElementById('root'));
 registerServiceWorker();

@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 import crypto from 'crypto-js';
-import got from 'got';
+import axios from 'axios';
 
 function url() {
     return 'www.url.com';
@@ -16,7 +16,7 @@ export function fetchStuff() {
     return dispatch => {
         return fetch(url(), {
             method: 'GET',
-            mode: 'cors',
+            // mode: 'cors',
             credentials: 'include',
             headers: {
                 'x-api-key': '',
@@ -28,9 +28,16 @@ export function fetchStuff() {
     };
 }
 
+export function updateStatePartial(data) {
+    console.log('update state action...');
+    return {type: types.UPDATE_STUFF_STATE, payload: data}
+}
+
 export function testTwitterApp(d){
     return (dispatch, getState, { OAuth }) => {
-        console.log(d)
+        dispatch(updateStatePartial({isLoading: true}))
+        dispatch(updateStatePartial({handle: d.TWITTER_HANDLE})) // we update the handle already as this is not a part of credentials that needs to be tested before being added to the persisted state
+        console.log('TESTING TWITTER APP CREDS WITH:',d)
 
         var oauth = OAuth({
             consumer: {
@@ -50,11 +57,20 @@ export function testTwitterApp(d){
 
         const url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
 
-        got(url, {
+        return axios(url, {
             headers: oauth.toHeader(oauth.authorize({url, method: 'GET'}, token)),
             json: true
+        }).then( (response) => {
+            console.log('Received data from TWITTER!',response.data);
+            dispatch(updateStatePartial({isLoading: false}));
+            dispatch(updateStatePartial({twitter_app: d}));
+            dispatch(updateStatePartial({handle_id: response.data.id}));
+            dispatch(updateStatePartial({verify_credentials_response: response.data}));
+            //TODO: show success notification
+        }).catch(function (error) {
+            dispatch(updateStatePartial({isLoading: false}));
+            //TODO: show an error message
+            console.error(error);
         });
-
-        return {type: types.TWITTER_APP_TEST, test: d};
     }
 }

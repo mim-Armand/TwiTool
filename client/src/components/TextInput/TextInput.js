@@ -18,7 +18,9 @@ class TextInput extends Component<Props, State> {
           <span className={ classNames('input input--nao', {"input--filled": ( /\S/.test(this.props.val)) } )}>
                 <input
                     onChange={this.props.onChange}
-                    className="input__field input__field--nao" type="text" id="input-1"
+                    type={`${this.props.type || "text"}`}
+                    className="input__field input__field--nao"
+                    // id="input-1"
                     value={this.props.val}
                     data-forval={this.props.forval}
                 />
