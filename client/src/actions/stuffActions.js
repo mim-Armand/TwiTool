@@ -1,9 +1,28 @@
 import * as types from './actionTypes';
 import crypto from 'crypto-js';
 import axios from 'axios';
+import OAuth from 'oauth-1.0a';
 
 function url() {
     return 'www.url.com';
+}
+
+function getOAuth(d, url){
+    var oauth = OAuth({
+        consumer: {
+            key: d.TWITTER_CONSUMER_KEY, //'<consumer key>',
+            secret: d.TWITTER_CONSUMER_SECRET//'<consumer secret>'
+        },
+        signature_method: 'HMAC-SHA1',
+        hash_function: function(base_string, key) {
+            return crypto.enc.Base64.stringify(crypto.HmacSHA1(base_string, key));
+        }
+    });
+    var token = {
+        key: d.TWITTER_ACCESS_TOKEN_KEY,
+        secret: d.TWITTER_ACCESS_TOKEN_SECRET
+    };
+    return oauth.toHeader(oauth.authorize({url, method: 'GET'}, token));
 }
 
 export function receiveStuff(json) {
@@ -39,26 +58,10 @@ export function testTwitterApp(d){
         dispatch(updateStatePartial({handle: d.TWITTER_HANDLE})) // we update the handle already as this is not a part of credentials that needs to be tested before being added to the persisted state
         console.log('TESTING TWITTER APP CREDS WITH:',d)
 
-        var oauth = OAuth({
-            consumer: {
-                key: d.TWITTER_CONSUMER_KEY, //'<consumer key>',
-                secret: d.TWITTER_CONSUMER_SECRET//'<consumer secret>'
-            },
-            signature_method: 'HMAC-SHA1',
-            hash_function: function(base_string, key) {
-                return crypto.enc.Base64.stringify(crypto.HmacSHA1(base_string, key));
-            }
-        });
-
-        var token = {
-            key: d.TWITTER_ACCESS_TOKEN_KEY,
-            secret: d.TWITTER_ACCESS_TOKEN_SECRET
-        };
-
         const url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
 
         return axios(url, {
-            headers: oauth.toHeader(oauth.authorize({url, method: 'GET'}, token)),
+            headers: getOAuth(d, url),
             json: true
         }).then( (response) => {
             console.log('Received data from TWITTER!',response.data);
