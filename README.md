@@ -24,6 +24,9 @@ Release candidates should have the combination word `release candidate` in the c
 
 
 
+## Contribution notes:
+ * Please note, if **Travis** failed, first try to purge the cache ( often times it fixes the problem! )
+
 
 
 
