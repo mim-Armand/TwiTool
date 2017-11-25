@@ -54,26 +54,48 @@ export function updateStatePartial(data) {
 
 export function testTwitterApp(d){
     return (dispatch, getState, { OAuth }) => {
-        dispatch(updateStatePartial({isLoading: true}))
-        dispatch(updateStatePartial({handle: d.TWITTER_HANDLE})) // we update the handle already as this is not a part of credentials that needs to be tested before being added to the persisted state
-        console.log('TESTING TWITTER APP CREDS WITH:',d)
-
+        dispatch(updateStatePartial({isLoading: true}));
+        dispatch(updateStatePartial({handle: d.TWITTER_HANDLE})); // we update the handle already as this is not a part of credentials that needs to be tested before being added to the persisted state
         const url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
-
-        return axios(url, {
-            headers: getOAuth(d, url),
-            json: true
-        }).then( (response) => {
-            console.log('Received data from TWITTER!',response.data);
-            dispatch(updateStatePartial({isLoading: false}));
-            dispatch(updateStatePartial({twitter_app: d}));
-            dispatch(updateStatePartial({handle_id: response.data.id}));
-            dispatch(updateStatePartial({verify_credentials_response: response.data}));
-            //TODO: show success notification
-        }).catch(function (error) {
-            dispatch(updateStatePartial({isLoading: false}));
-            //TODO: show an error message
-            console.error(error);
-        });
+        return axios(url, { headers: getOAuth(d, url),  json: true })
+            .then( (response) => {
+                console.log('Received data from TWITTER!',response.data);
+                dispatch(updateStatePartial({isLoading: false}));
+                dispatch(updateStatePartial({twitter_app: d}));
+                dispatch(updateStatePartial({handle_id: response.data.id}));
+                dispatch(updateStatePartial({verify_credentials_response: response.data}));
+                //TODO: show success notification
+            })
+            .catch(function (error) {
+                dispatch(updateStatePartial({isLoading: false}));
+                //TODO: show an error message
+                console.error(error);
+            });
     }
+}
+
+export function checkRateLimits(d){
+    return (dispatch, getState) => {
+        dispatch( updateStatePartial( {isLoading: true} ));
+        const url = 'https://api.twitter.com/1.1/application/rate_limit_status.json';
+        return axios(url, { headers: getOAuth(d, url), json: true})
+            .then( (response) => {
+                console.log('Rate Limits:',response.data);
+                dispatch(updateStatePartial({isLoading: false}));
+                dispatch(updateStatePartial({rate_limit_response: response.data}));
+                //TODO: show success notification
+            })
+            .catch(function (error) {
+                dispatch(updateStatePartial({isLoading: false}));
+                //TODO: show an error message
+                console.error(error);
+            });
+    }
+}
+
+export function getFollowersCycle(){
+    // * check for twitter app creds and that they verify
+    // * start an interval for:
+    //    1 check the rate limits
+    //    2 if rate limit is not hit --> make the call to get followers, otherwise nothing..
 }
