@@ -29,8 +29,7 @@ class App extends Component<Props, State> {
 
     componentWillMount() { // HERE WE ARE TRIGGERING THE ACTION
         console.log('componentWillMount',this.props)
-        this.props.stuffActions.receiveStuff('ttt');
-
+        this.props.stuffActions.getFollowersCycle();
     }
 
   render() {
@@ -63,7 +62,6 @@ App.propTypes = {
     test: PropTypes.any
 };
 function mapStateToProps(state) {
-    console.log('mapStateToProps', state)
     return {
         test: state.stuff.test,
         stuff: state.stuff
