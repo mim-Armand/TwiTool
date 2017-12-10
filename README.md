@@ -12,6 +12,8 @@ CircleCI-Build: [![CircleCI](https://circleci.com/gh/mim-Armand/TwiTool.svg?styl
 # To run:
 `yarn start`
 
+To run/test in Chrome we need to enable CORS temporarily by running`open -a Google\ Chrome --args --disable-web-security --user-data-dir`
+
 # To build:
 `yran build`
 

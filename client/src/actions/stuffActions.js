@@ -103,19 +103,28 @@ export function checkRateLimits(d){
     }
 }
 
-export function getFollowers(d){
+export function getFollowers(d, cursor, count){
     return ( dispatch, getState ) => {
         dispatch ( updateStatePartial( {isLoading: true } ))
-        const url = 'https://api.twitter.com/1.1/followers/ids.json?cursor=-1&screen_name=mim_Armand&count=5';
+
+        let fh_ = getState().stuff.fetch_followers_history.slice();
+        let cfh_ = fh_.pop(); // current batch
+        console.log('fh_ > ', fh_, 'cfh_ > ', cfh_)
+        const url = `https://api.twitter.com/1.1/followers/ids.json?cursor=${ cursor || cfh_.cursor }&screen_name=mim_Armand&count=${ count || getState().stuff.fetch_followers_batch}`;
         return axios(url, { headers: getOAuth(d, url), json: true})
             .then( (response) => {
                 console.log('Followers',response.data);
-                // dispatch(updateStatePartial({
-                //     rate_limit_response: {
-                //         ...response.data,
-                //         ...{timestamp: Date.now()}
-                //     }
-                // }));
+                //TODO: persist data on disk ( + some data - like the number of followers, etc. - on the state )
+                cfh_.cursor = response.data.next_cursor_str;
+                cfh_.last_fetch = Date.now();
+                fh_.push(cfh_);
+                dispatch(updateStatePartial({
+                    rate_limit_response: {
+                        ...response.data,
+                        ...{timestamp: Date.now()}
+                    },
+                    fetch_followers_history: fh_
+                }));
             })
             .catch(function (error) { console.error(error); }); //TODO: show an error message
 
@@ -125,6 +134,17 @@ export function getFollowers(d){
 
 export function getFollowersCycle(){
     return (dispatch, getState ) =>{
+
+        // THE FOLLOWING IS JUST FOR DEVELOPMENT TO RESET PARTS OF THE STATE SO WE CAN RETRY!
+        // dispatch(updateStatePartial({
+        //     fetch_followers_history: [{
+        //         start: Date.now(),
+        //         last_fetch: null,
+        //         cursor: "-1"
+        //     }],
+        //     fetch_followers_batch: 250
+        // }));
+
         console.info('getFollowersCycle...');
         // * check for twitter app creds and that they verify
         console.info('checking for twitter app creds and that they verify..')
@@ -140,23 +160,41 @@ export function getFollowersCycle(){
                         // }
                         var remains_ = getState().stuff.rate_limit_response.resources.followers["/followers/ids"]["remaining"];
                         console.info(`Currently remaining rate limit is: `, remains_);
-                        if ( remains_ > 15 ){ // <<TODO!
+                        if ( remains_ > 7 ){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
                             console.info(`Now getting the next 5K follower IDs..`);
-                            return dispatch( getFollowers(t_)).then( ()=>{
-                                console.log("DONE! - - - - - - - - - - - - - - \n we need to persist the followers ids, next cursur, timstamp and what not somewhere!!")
+                            return dispatch( getFollowers(t_))
+                                .then( ()=>{
+                                let fh_ = getState().stuff.fetch_followers_history.slice();
+                                let crsr_ = fh_[ fh_.length - 1 ].cursor; // next cursor
+                                    console.log(" _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ cursor: ", crsr_);
+                                    if( crsr_ == 0 ){
+                                        console.log(" WE NEED TO START A NEW BATCH! ")
+                                        dispatch(updateStatePartial({
+                                            fetch_followers_history: [...fh_, {
+                                                start: Date.now(),
+                                                last_fetch: null,
+                                                cursor: "-1"
+                                            }]
+                                        }));
+                                    }
 
-                                // 1. Get the next cursur ( -1 if starts )
-                                // 2. Make the call
-                                // 3. persist:
-                                //    - Follower IDs
-                                //    - Next cursur
-                                //    - TimeStamp
-
-                                return dispatch( getFollowersCycle());
+                            //     // 1. Get the next cursur ( -1 if starts )
+                            //     // 2. Make the call
+                            //     // 3. persist:
+                            //     //    - Follower IDs
+                            //     //    - Next cursur
+                            //     //    - TimeStamp
+                            //     // 4. If cursor==0, that's the last record so we start a new batch and add an starting point to the fetch_followers_history
+                            //
+                            return dispatch( getFollowersCycle() );
                             });
                         }else{
-                            let reset = new Date(0).setUTCSeconds( getState().stuff.rate_limit_response.resources.followers["/followers/ids"].reset );;
-                            console.info( "RATE LIMIT IS REACHED!!!", `Reset in ${( reset - Date.now() ) / 1000 / 60} minutes!` );
+                            let reset = new Date(0).setUTCSeconds( getState().stuff.rate_limit_response.resources.followers["/followers/ids"].reset ) - Date.now();
+                            console.info( "RATE LIMIT IS REACHED!!!", `Reset in ${( reset  ) / 1000 / 60} minutes!` );
+                            setTimeout(()=>{
+                                console.log("THE CALLBACK IS FIRED NOW!");
+                                return dispatch( getFollowersCycle() );
+                            }, reset)
                         }
                     })
                 }

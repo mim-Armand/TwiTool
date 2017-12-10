@@ -1,6 +1,7 @@
 //@flow
 import React, { Component } from 'react';
 import './Page_Search.css';
+import ProgressBar1 from "../ProgressBar1/ProgressBar1";
 
 
 type Props = {
@@ -15,7 +16,10 @@ class Page_Search extends Component<Props, State> {
   render() {
       console.log(this.props)
     return (
-        <h1>Page SEARCH!</h1>
+        <div>
+            <h5>add the progress bars etc.</h5>
+            <ProgressBar1/>
+        </div>
     );
   }
 }
