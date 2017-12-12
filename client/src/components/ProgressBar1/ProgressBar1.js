@@ -18,7 +18,7 @@ class ProgressBar1 extends Component<Props, State> {
         <div className="flexy-column">
             <div className="progress-factor flexy-item">
                 <div className="progress-bar">
-                    <div className="bar has-rotation has-colors red heat-gradient" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                    <div className="bar has-rotation has-colors red heat-gradient" role="progressbar" aria-valuenow={this.props.progress} aria-valuemin="0" aria-valuemax="100">
                         <div className="tooltip heat-gradient-tooltip"></div>
                         <div className="bar-face face-position roof percentage"></div>
                         <div className="bar-face face-position back percentage"></div>
