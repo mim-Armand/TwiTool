@@ -47,8 +47,15 @@ class App extends Component<Props, State> {
                                     handle={this.props.stuff.handle}
                                     isLoading={this.props.stuff.isLoading | false}
                                     {...props} />} />
+                        <Route exact path="/search"
+                               render={props => <Page_Search
+                                   handle={this.props.stuff.handle}
+                                   isLoading={this.props.stuff.isLoading | false}
+                                   rateLimit={ ( 15 - this.props.stuff.rate_limit_response.resources.followers["/followers/ids"]["remaining"]) * 6.66}
+                                   followers_count={this.props.stuff.verify_credentials_response.followers_count}
+                                   followers_cought={this.props.stuff.fetch_followers_history[this.props.stuff.fetch_followers_history.length - 1].sofar}
+                                   {...props} />} />
                         <Route exact path="/help_twitter_app" component={Help_Twitter_App}/>
-                        <Route exact path="/search" component={Page_Search}/>
                         <Route exact path="/info" component={Page_Info}/>
                     </span>
           </ConnectedRouter>

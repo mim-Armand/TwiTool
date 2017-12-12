@@ -98,7 +98,8 @@ export function checkRateLimits(d){
             .catch(function (error) {
                 //TODO: show an error message
                 console.error(error);
-                dispatch(updateStatePartial({isLoading: false}));
+                console.erro("THE RATE LIMIT REQUEST FAILED!!!")
+                // dispatch(updateStatePartial({isLoading: false}));
             });
     }
 }
@@ -109,6 +110,7 @@ export function getFollowers(d, cursor, count){
 
         let fh_ = getState().stuff.fetch_followers_history.slice();
         let cfh_ = fh_.pop(); // current batch
+        let sofar_ = cfh_.sofar || 0;
         console.log('fh_ > ', fh_, 'cfh_ > ', cfh_)
         const url = `https://api.twitter.com/1.1/followers/ids.json?cursor=${ cursor || cfh_.cursor }&screen_name=mim_Armand&count=${ count || getState().stuff.fetch_followers_batch}`;
         return axios(url, { headers: getOAuth(d, url), json: true})
@@ -117,12 +119,9 @@ export function getFollowers(d, cursor, count){
                 //TODO: persist data on disk ( + some data - like the number of followers, etc. - on the state )
                 cfh_.cursor = response.data.next_cursor_str;
                 cfh_.last_fetch = Date.now();
+                cfh_.sofar = sofar_ + (response.data.ids.length);
                 fh_.push(cfh_);
                 dispatch(updateStatePartial({
-                    rate_limit_response: {
-                        ...response.data,
-                        ...{timestamp: Date.now()}
-                    },
                     fetch_followers_history: fh_
                 }));
             })
@@ -155,27 +154,36 @@ export function getFollowersCycle(){
                 if(getState().stuff.verify_credentials_response.timestamp < Date.now() + 999 ){ // the creds were added recently (probably by the dispatch above^^^) and are OK (they wouldn't be persisted otherwise)!
                     console.info("Now starting an interval and checking for rate limits...");
                     // TODO start the interval and distill the following to it's own action ( so we can use it with dispatch from the interval )
-                    return dispatch( checkRateLimits(t_)).then ( ()=>{
+                    return dispatch( checkRateLimits(t_))
+                        .then ( ()=>{
                         // if( getState().stuff.rate_limit_response.timestamp > Date.now() + 999 ){
                         // }
                         var remains_ = getState().stuff.rate_limit_response.resources.followers["/followers/ids"]["remaining"];
                         console.info(`Currently remaining rate limit is: `, remains_);
-                        if ( remains_ > 7 ){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
+                        if ( remains_ > 11){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
                             console.info(`Now getting the next 5K follower IDs..`);
                             return dispatch( getFollowers(t_))
                                 .then( ()=>{
                                 let fh_ = getState().stuff.fetch_followers_history.slice();
                                 let crsr_ = fh_[ fh_.length - 1 ].cursor; // next cursor
                                     console.log(" _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ cursor: ", crsr_);
-                                    if( crsr_ == 0 ){
-                                        console.log(" WE NEED TO START A NEW BATCH! ")
+                                    if( crsr_ == 0 ){ // it was the last batch so we have to start over after a while!
+                                        console.log(" WE NEED TO START A NEW BATCH! ");
                                         dispatch(updateStatePartial({
                                             fetch_followers_history: [...fh_, {
                                                 start: Date.now(),
                                                 last_fetch: null,
+                                                sofar: 0,
                                                 cursor: "-1"
                                             }]
                                         }));
+                                        setTimeout(()=>{
+                                            return dispatch( getFollowersCycle() );
+                                        }, 99999)
+                                    }else{ // wasn't the last batch so we need to get the next one with a tiny wait time for aestetics!
+                                        setTimeout(()=>{
+                                            return dispatch( getFollowersCycle() );
+                                        }, 9999) //TODO: this timeout should be a lot less, some like 99 or som'n!
                                     }
 
                             //     // 1. Get the next cursur ( -1 if starts )
@@ -186,7 +194,6 @@ export function getFollowersCycle(){
                             //     //    - TimeStamp
                             //     // 4. If cursor==0, that's the last record so we start a new batch and add an starting point to the fetch_followers_history
                             //
-                            return dispatch( getFollowersCycle() );
                             });
                         }else{
                             let reset = new Date(0).setUTCSeconds( getState().stuff.rate_limit_response.resources.followers["/followers/ids"].reset ) - Date.now();
