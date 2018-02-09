@@ -15,10 +15,10 @@ type State = {
 
 class Page_Search extends Component<Props, State> {
   render() {
-      console.log(this.props)
+      // console.log(this.props)
     return (
         <div>
-            <ProgressBar0 value={this.props.rateLimit || 0} title="Api Rate Limits: "/>
+            <ProgressBar0 value={this.props.rateLimit || 0} title={`Api Rate Limits: ${this.props.rateLimit}%`}/>
             <ProgressBar0 value={this.props.followers_cought || 0} max={this.props.followers_count || 0 } title={`This batch catch: ${this.props.followers_cought} / ${this.props.followers_count}`} />
             <h5>add the progress bars etc.</h5>
             <ProgressBar1 progress="45"/>

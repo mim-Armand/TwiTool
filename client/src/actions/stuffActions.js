@@ -97,14 +97,14 @@ export function checkRateLimits(d){
             })
             .catch(function (error) {
                 //TODO: show an error message
-                console.error(error);
-                console.erro("THE RATE LIMIT REQUEST FAILED!!!")
+                console.error("THE RATE LIMIT REQUEST FAILED!!!", error);
                 // dispatch(updateStatePartial({isLoading: false}));
             });
     }
 }
 
 export function getFollowers(d, cursor, count){
+    let El_Store = window.El_Store;
     return ( dispatch, getState ) => {
         dispatch ( updateStatePartial( {isLoading: true } ))
 
@@ -115,7 +115,11 @@ export function getFollowers(d, cursor, count){
         const url = `https://api.twitter.com/1.1/followers/ids.json?cursor=${ cursor || cfh_.cursor }&screen_name=mim_Armand&count=${ count || getState().stuff.fetch_followers_batch}`;
         return axios(url, { headers: getOAuth(d, url), json: true})
             .then( (response) => {
-                console.log('Followers',response.data);
+                console.log('Followers', fh_.length, cfh_.sofar, response.data);
+                let el_store;
+                 if (typeof El_Store !== 'undefined') el_store = new El_Store({cwd: 'followers', name: fh_.length});
+                 el_store.set(`${cfh_.sofar}`, response.data , el_store);
+                 console.log(el_store.get(`${cfh_.sofar}`), el_store);
                 //TODO: persist data on disk ( + some data - like the number of followers, etc. - on the state )
                 cfh_.cursor = response.data.next_cursor_str;
                 cfh_.last_fetch = Date.now();
@@ -160,13 +164,14 @@ export function getFollowersCycle(){
                         // }
                         var remains_ = getState().stuff.rate_limit_response.resources.followers["/followers/ids"]["remaining"];
                         console.info(`Currently remaining rate limit is: `, remains_);
-                        if ( remains_ > 11){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
+                        if ( remains_ > 5){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
                             console.info(`Now getting the next 5K follower IDs..`);
                             return dispatch( getFollowers(t_))
                                 .then( ()=>{
                                 let fh_ = getState().stuff.fetch_followers_history.slice();
                                 let crsr_ = fh_[ fh_.length - 1 ].cursor; // next cursor
                                     console.log(" _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ cursor: ", crsr_);
+                                    let addInterval = 15000; // TODO: this could/should be set to 0 for maximum speed!
                                     if( crsr_ == 0 ){ // it was the last batch so we have to start over after a while!
                                         console.log(" WE NEED TO START A NEW BATCH! ");
                                         dispatch(updateStatePartial({
@@ -179,11 +184,11 @@ export function getFollowersCycle(){
                                         }));
                                         setTimeout(()=>{
                                             return dispatch( getFollowersCycle() );
-                                        }, 99999)
+                                        }, 99999 + addInterval)
                                     }else{ // wasn't the last batch so we need to get the next one with a tiny wait time for aestetics!
                                         setTimeout(()=>{
                                             return dispatch( getFollowersCycle() );
-                                        }, 9999) //TODO: this timeout should be a lot less, some like 99 or som'n!
+                                        }, 9999 + addInterval) //TODO: this timeout should be a lot less, some like 99 or som'n!
                                     }
 
                             //     // 1. Get the next cursur ( -1 if starts )

@@ -23,7 +23,7 @@
           const version = isElectron? app.getVersion(): null;
 
           // if we couldn't get the redux-persist to work this could be an alternative?!:
-//          const El_Store = require('electron-store');
+          El_Store = require('electron-store');
 //          if (typeof El_Store !== 'undefined') el_store = new El_Store({name: "machine"});
 //          el_store.set('unicorn', '🦄🦄🦄', el_store);
 //          console.log(el_store.get('unicorn'));

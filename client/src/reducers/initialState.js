@@ -16,5 +16,15 @@ export default {
             last_fetch: null,
             cursor: "-1"
         }
-    ]
+    ],
+    rate_limit_response: {
+        resources: {
+            followers: {
+                "/followers/ids":{}
+            }
+        }
+    },
+    verify_credentials_response: {
+
+    }
 };
