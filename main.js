@@ -9,6 +9,19 @@ const log = require('electron-log'); // ~/Library/Logs/<app name>/log.log
 const isDev = require('electron-is-dev');
 require('./auto-update.js');
 
+const Store = require('electron-store');
+const el_store = new Store();
+
+
+//----------------------------------------------------------------------------------------------------------------------
+//          Persistence mechanism
+//
+function diskPersist(key, value){ // key accept dot-notation so is nestable
+    el_store.set(key, value);
+    el_store.set('unicorn', '🦄');
+    console.log(el_store.get('unicorn'));
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 //          Logging
 //

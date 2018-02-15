@@ -14,7 +14,6 @@ type State = {
 
 class Btn01 extends Component<Props, State> {
   render() {
-      console.log(this.props)
     return (
         <button className="button button--sacnite button--round-l" onClick={()=>this.props.click(this.props.route)}>
             <i className={"btns fa fa-2x fa-" + this.props.icon}></i>
