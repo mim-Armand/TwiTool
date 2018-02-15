@@ -118,7 +118,9 @@ export function getFollowers(d, cursor, count){
                 console.log('Followers', fh_.length, cfh_.sofar, response.data);
                 let el_store;
                  if (typeof El_Store !== 'undefined') el_store = new El_Store({cwd: 'followers', name: fh_.length});
-                 el_store.set(`${cfh_.sofar}`, response.data , el_store);
+                 el_store.set(`ids`, response.data.ids , el_store);
+                 // el_store.set(`ids.timeStamp`, Date.now() , el_store);
+                 el_store.set(`${cfh_.sofar}.timeStamp`, Date.now() , el_store);
                  console.log(el_store.get(`${cfh_.sofar}`), el_store);
                 //TODO: persist data on disk ( + some data - like the number of followers, etc. - on the state )
                 cfh_.cursor = response.data.next_cursor_str;
@@ -164,7 +166,7 @@ export function getFollowersCycle(){
                         // }
                         var remains_ = getState().stuff.rate_limit_response.resources.followers["/followers/ids"]["remaining"];
                         console.info(`Currently remaining rate limit is: `, remains_);
-                        if ( remains_ > 5){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
+                        if ( remains_ > 8){ // <<TODO! this is just to limit the number of reqs so we don't have to wait 15 each time, but for prod can be set to 0
                             console.info(`Now getting the next 5K follower IDs..`);
                             return dispatch( getFollowers(t_))
                                 .then( ()=>{

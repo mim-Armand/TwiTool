@@ -2,6 +2,9 @@
 An standalone, open-source tooling application for Twitter!
 
 
+![Screenshot1](./screenshots/01.png "Twitool screenshot 01")
+
+
 
 CircleCI-Build: [![CircleCI](https://circleci.com/gh/mim-Armand/TwiTool.svg?style=svg)](https://circleci.com/gh/mim-Armand/TwiTool)
 
