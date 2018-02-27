@@ -62,3 +62,6 @@ dist
 
 # IntelliJ stuff
 .idea
+
+# Ignoring Font Awesome for now ( while in beta )
+fontawesome
